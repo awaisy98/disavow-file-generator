@@ -9,6 +9,21 @@
   <title>Disavow File Builder | Powered by RankTracking Studio</title>
   <style>
 :root {
+  body {
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+.panel-input {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.panel-controls {
+  background: rgba(245, 247, 251, 0.8);
+}
   color-scheme: light;
   --bg: #f5f7fb;
   --bg-2: #edf2fb;
@@ -165,28 +180,16 @@ body {
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 420px);
   gap: 32px;
   align-items: start;
-  margin-bottom: 26px;
 }
 
 .hero-copy,
 .hero-card,
 .panel,
-/* WORKFLOW STEP (UNIFIED STYLE) */
 .workflow-step {
-  display: flex;
-  gap: 16px;
-  padding: 18px;
-  border-radius: 18px;
   border: 1px solid rgba(20, 33, 54, 0.08);
   background: var(--panel);
   box-shadow: var(--shadow-lg);
   backdrop-filter: blur(14px);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.workflow-step:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
 }
 
 .hero-copy {
@@ -274,15 +277,10 @@ body {
 }
 
 .feature-pill,
-.metric-card {
-  box-shadow: none;
-  background: rgba(255,255,255,0.6);
-}
-
-.feature-pill:hover,
-.metric-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+.metric-card,
+.field-card {
+  border: 1px solid rgba(20, 33, 54, 0.06);
+  background: rgba(255, 255, 255, 0.65);
 }
 
 .feature-pill {
@@ -397,6 +395,13 @@ body {
   margin-top: 22px;
 }
 
+.workflow-step {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 24px;
+}
+
 .workflow-step p,
 .footer-copy {
   margin: 8px 0 0;
@@ -418,10 +423,10 @@ body {
 
 .workspace {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 22px;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  margin-top: 26px;
   align-items: start;
-  margin-top: 10px;
 }
 
 .panel {
@@ -621,15 +626,8 @@ th {
 }
 
 .output {
-  min-height: 460px;
-  margin-top: 12px;
-  padding: 18px;
+  background: linear-gradient(180deg, #0f172a 0%, #111c33 100%);
   border-radius: 16px;
-  background: #0b1220;
-  color: #e8f0ff;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
 }
     
 button:disabled {
@@ -660,12 +658,8 @@ button:disabled {
   .hero,
   .workspace,
   .results {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 22px;
-  align-items: start;
-  margin-top: 22px;
-}
+    grid-template-columns: 1fr;
+  }
 
   .hero-copy h2 {
     max-width: 14ch;
@@ -685,58 +679,53 @@ button:disabled {
   }
 }
 
-.drop-icon {
-  font-size: 28px;
-  transition: transform 0.2s ease;
-}
+@media (max-width: 720px) {
+  .shell {
+    width: min(100% - 20px, 100%);
+  }
 
-.dropzone:hover .drop-icon {
-  transform: translateY(-4px);
-}
+  .header-bar,
+  .panel-head,
+  .subhead {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.metric-card strong {
-  transition: transform 0.2s ease;
-}
+  .header-nav,
+  .hero-actions,
+  .actions {
+    width: 100%;
+  }
 
-.metric-card.updated strong {
-  transform: scale(1.15);
-}
+  .header-nav a,
+  .primary-link,
+  .secondary-link,
+  .file-button,
+  .ghost-button,
+  .primary-button {
+    width: 100%;
+  }
 
-.status-pill.is-ready::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 999px;
-  border: 1px solid var(--teal);
-  animation: pulse 1.8s infinite;
-}
+  .hero-copy,
+  .hero-card,
+  .panel {
+    padding: 20px;
+    border-radius: 22px;
+  }
 
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(1.2); opacity: 0; }
-}
+  .hero-copy h2 {
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+  max-width: 18ch;
+  }
 
-tbody tr:hover {
-  background: rgba(31,111,235,0.06);
-}
-
-.trust-strip {
-  text-align: center;
-  margin: 20px 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.panel:hover {
-  transform: translateY(-2px);
-  transition: 0.2s ease;
-}
+  .output {
+    min-height: 340px;
+  }
   .header-nav a.active {
   background: var(--brand-soft);
   color: var(--brand-strong);
 }
-
-.drop-icon {
+  .drop-icon {
   font-size: 28px;
   transition: transform 0.2s ease;
 }
@@ -744,16 +733,14 @@ tbody tr:hover {
 .dropzone:hover .drop-icon {
   transform: translateY(-4px);
 }
-
-.metric-card strong {
+  .metric-card strong {
   transition: transform 0.2s ease;
 }
 
 .metric-card.updated strong {
   transform: scale(1.15);
 }
-
-.status-pill.is-ready::after {
+  .status-pill.is-ready::after {
   content: "";
   position: absolute;
   inset: -4px;
@@ -766,21 +753,19 @@ tbody tr:hover {
   0% { transform: scale(1); opacity: 0.6; }
   100% { transform: scale(1.2); opacity: 0; }
 }
-
-tbody tr:hover {
+  tbody tr:hover {
   background: rgba(31,111,235,0.06);
 }
-
-.trust-strip {
+  .trust-strip {
   text-align: center;
   margin: 20px 0;
   color: var(--muted);
   font-size: 0.9rem;
 }
-
-.panel:hover {
+  .panel:hover {
   transform: translateY(-2px);
   transition: 0.2s ease;
+}
 }
 
 </style>
@@ -818,6 +803,36 @@ tbody tr:hover {
           exact URL modes, and export the final list with confidence.
         </p>
 
+        <div class="hero-actions">
+          <a class="primary-link" href="#workspace">Start with a File</a>
+          <a class="secondary-link" href="#export">Jump to Output</a>
+        </div>
+
+        <div class="feature-row">
+          <article class="feature-pill">
+            <span class="feature-label">Data Sources</span>
+            <strong>Excel, CSV, TSV, TXT</strong>
+          </article>
+          <article class="feature-pill">
+            <span class="feature-label">Disavow Modes</span>
+            <strong>Domain and exact URL</strong>
+          </article>
+          <article class="feature-pill">
+            <span class="feature-label">Processing Engine</span>
+            <strong>Detect, review, export</strong>
+          </article>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <div class="hero-card-head">
+          <div>
+            <p class="card-eyebrow">Live workspace</p>
+            <h3>Current session</h3>
+          </div>
+          <span class="status-pill is-idle" id="status-pill">Waiting for data</span>
+        </div>
+
         <div class="metrics-grid">
           <article class="metric-card">
             <span class="metric-label">Rows loaded</span>
@@ -842,7 +857,30 @@ tbody tr:hover {
         </div>
       </aside>
     </section>
-  
+
+    <section class="workflow-strip" aria-label="Workflow steps">
+      <article class="workflow-step">
+        <span class="workflow-number">01</span>
+        <div>
+          <h3>Import</h3>
+          <p>Load backlink export from SEO tools or paste a custom list.</p>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="workflow-number">02</span>
+        <div>
+          <h3>Review</h3>
+          <p>Confirm the right sheet, source column, and output mode.</p>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="workflow-number">03</span>
+        <div>
+          <h3>Export</h3>
+          <p>Export optimized Google Disavow file (.txt format)</p>
+        </div>
+      </article>
+    </section>
 
     <section class="workspace" id="workspace">
       <div class="panel panel-input">
@@ -1851,4 +1889,3 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
 </script>
 </body>
 </html>
-
