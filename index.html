@@ -660,9 +660,12 @@ button:disabled {
   .hero,
   .workspace,
   .results {
-    grid-template-columns: 1fr;
-    margin-top: 18px;
-  }
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 22px;
+  align-items: start;
+  margin-top: 22px;
+}
 
   .hero-copy h2 {
     max-width: 14ch;
@@ -783,7 +786,6 @@ tbody tr:hover {
 .panel:hover {
   transform: translateY(-2px);
   transition: 0.2s ease;
-}
 }
 
 </style>
