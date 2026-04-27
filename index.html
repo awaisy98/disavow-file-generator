@@ -682,53 +682,12 @@ button:disabled {
   }
 }
 
-@media (max-width: 720px) {
-  .shell {
-    width: min(100% - 20px, 100%);
-  }
-
-  .header-bar,
-  .panel-head,
-  .subhead {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .header-nav,
-  .hero-actions,
-  .actions {
-    width: 100%;
-  }
-
-  .header-nav a,
-  .primary-link,
-  .secondary-link,
-  .file-button,
-  .ghost-button,
-  .primary-button {
-    width: 100%;
-  }
-
-  .hero-copy,
-  .hero-card,
-  .panel {
-    padding: 20px;
-    border-radius: 22px;
-  }
-
-  .hero-copy h2 {
-    font-size: clamp(2.2rem, 4vw, 3.8rem);
-  max-width: 18ch;
-  }
-
-  .output {
-    min-height: 340px;
-  }
-  .header-nav a.active {
+.header-nav a.active {
   background: var(--brand-soft);
   color: var(--brand-strong);
 }
-  .drop-icon {
+
+.drop-icon {
   font-size: 28px;
   transition: transform 0.2s ease;
 }
@@ -736,14 +695,16 @@ button:disabled {
 .dropzone:hover .drop-icon {
   transform: translateY(-4px);
 }
-  .metric-card strong {
+
+.metric-card strong {
   transition: transform 0.2s ease;
 }
 
 .metric-card.updated strong {
   transform: scale(1.15);
 }
-  .status-pill.is-ready::after {
+
+.status-pill.is-ready::after {
   content: "";
   position: absolute;
   inset: -4px;
@@ -756,16 +717,70 @@ button:disabled {
   0% { transform: scale(1); opacity: 0.6; }
   100% { transform: scale(1.2); opacity: 0; }
 }
-  tbody tr:hover {
+
+tbody tr:hover {
   background: rgba(31,111,235,0.06);
 }
-  .trust-strip {
+
+.trust-strip {
   text-align: center;
   margin: 20px 0;
   color: var(--muted);
   font-size: 0.9rem;
 }
-  .panel:hover {
+
+.panel:hover {
+  transform: translateY(-2px);
+  transition: 0.2s ease;
+}
+  .header-nav a.active {
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+}
+
+.drop-icon {
+  font-size: 28px;
+  transition: transform 0.2s ease;
+}
+
+.dropzone:hover .drop-icon {
+  transform: translateY(-4px);
+}
+
+.metric-card strong {
+  transition: transform 0.2s ease;
+}
+
+.metric-card.updated strong {
+  transform: scale(1.15);
+}
+
+.status-pill.is-ready::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1px solid var(--teal);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+tbody tr:hover {
+  background: rgba(31,111,235,0.06);
+}
+
+.trust-strip {
+  text-align: center;
+  margin: 20px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.panel:hover {
   transform: translateY(-2px);
   transition: 0.2s ease;
 }
