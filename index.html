@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Disavow File Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Disavow File Builder | Powered by RankTracking Studio</title>
   <style>
 :root {
   color-scheme: light;
@@ -29,8 +32,8 @@
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-sm: 10px;
-  --font-ui: "Segoe UI", "Aptos", "Helvetica Neue", sans-serif;
-  --font-display: "Georgia", "Times New Roman", serif;
+  --font-ui: "Inter", "Segoe UI", sans-serif;
+  --font-display: "DM Sans", sans-serif;
 }
 
 * {
@@ -709,6 +712,47 @@ button:disabled {
   .output {
     min-height: 340px;
   }
+  .header-nav a.active {
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+}
+  .drop-icon {
+  font-size: 28px;
+  transition: transform 0.2s ease;
+}
+
+.dropzone:hover .drop-icon {
+  transform: translateY(-4px);
+}
+  .metric-card strong {
+  transition: transform 0.2s ease;
+}
+
+.metric-card.updated strong {
+  transform: scale(1.15);
+}
+  .status-pill.is-ready::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1px solid var(--teal);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+  tbody tr:hover {
+  background: rgba(31,111,235,0.06);
+}
+  .trust-strip {
+  text-align: center;
+  margin: 20px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
 }
 
 </style>
@@ -719,10 +763,11 @@ button:disabled {
   <header class="site-header">
     <div class="shell header-bar">
       <div class="brand">
-        <span class="brand-mark">DF</span>
+        <span class="brand-mark">AY</span>
         <div>
-          <p class="brand-kicker">SEO Workflow Utility</p>
-          <h1 class="brand-name">Disavow File Builder</h1>
+          <p class="brand-kicker">AI-Powered SEO Utility</p>
+          <h1 class="brand-name">Disavow File Generator</h1>
+          <p style="margin:0;font-size:0.8rem;color:var(--muted);">Powered by RankTracker Studio • Built by Awais Yaseen</p>
         </div>
       </div>
 
@@ -738,9 +783,9 @@ button:disabled {
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">Google Search Console Preparation</p>
-        <h2>Transform backlink exports into a clean disavow submission file.</h2>
+        <h2>Transform bad backlinks data into a clean disavow submission file.</h2>
         <p class="intro">
-          Built for SEO teams who export backlinks from Ahrefs, SEMrush, or spreadsheets and need
+          Built for SEO professionals who export backlinks from Ahrefs, SEMrush, or spreadsheets and need
           a faster path to a valid disavow text file. Upload, inspect, switch between domain and
           exact URL modes, and export the final list with confidence.
         </p>
@@ -752,15 +797,15 @@ button:disabled {
 
         <div class="feature-row">
           <article class="feature-pill">
-            <span class="feature-label">Imports</span>
+            <span class="feature-label">Data Sources</span>
             <strong>Excel, CSV, TSV, TXT</strong>
           </article>
           <article class="feature-pill">
-            <span class="feature-label">Modes</span>
+            <span class="feature-label">Disavow Modes</span>
             <strong>Domain and exact URL</strong>
           </article>
           <article class="feature-pill">
-            <span class="feature-label">Workflow</span>
+            <span class="feature-label">Processing Engine</span>
             <strong>Detect, review, export</strong>
           </article>
         </div>
@@ -805,7 +850,7 @@ button:disabled {
         <span class="workflow-number">01</span>
         <div>
           <h3>Import</h3>
-          <p>Load exports from SEO tools or paste a custom list.</p>
+          <p>Load backlink export from SEO tools or paste a custom list.</p>
         </div>
       </article>
       <article class="workflow-step">
@@ -819,7 +864,7 @@ button:disabled {
         <span class="workflow-number">03</span>
         <div>
           <h3>Export</h3>
-          <p>Download a `.txt` file ready for the disavow tool.</p>
+          <p>Export optimized Google Disavow file (.txt format)</p>
         </div>
       </article>
     </section>
@@ -836,6 +881,7 @@ button:disabled {
         </div>
 
         <label class="dropzone" id="dropzone" for="file-input">
+          <div class="drop-icon">⬆</div>
           <span class="dropzone-badge">Drag and drop supported</span>
           <span class="dropzone-title">Choose a workbook, spreadsheet, or text export</span>
           <span class="dropzone-text">Excel, CSV, TSV, TXT, or one URL/domain per line</span>
@@ -958,27 +1004,38 @@ button:disabled {
       </div>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <div class="shell footer-grid">
-      <div>
-        <p class="footer-kicker">Disavow File Builder</p>
-        <p class="footer-copy">
-          Designed to help SEO specialists clean exports before submitting them in Google Search Console.
-        </p>
-      </div>
-
-      <div>
-        <h3>Best use cases</h3>
-        <p class="footer-copy">Referring domains, toxic backlink reviews, manual URL disavow lists, and multi-sheet exports.</p>
-      </div>
-
-      <div>
-        <h3>Reminder</h3>
-        <p class="footer-copy">Always review the final output before submitting it through the disavow tool.</p>
-      </div>
+<div class="trust-strip">
+  ✓ No data stored locally
+  ✓ Runs in browser
+  ✓ SEO-safe output
+</div>
+ <footer class="site-footer">
+  <div class="shell footer-grid">
+    
+    <div>
+      <p class="footer-kicker">SEO Utility Suite</p>
+      <p class="footer-copy">
+        A professional SEO tool designed for marketers and agencies to simplify backlink disavow workflows and improve search performance.
+      </p>
     </div>
-  </footer>
+
+    <div>
+      <h3>Built For SEO Professionals</h3>
+      <p class="footer-copy">
+        Trusted by SEO specialists for auditing backlinks, cleaning exports, and preparing Google Search Console submissions.
+      </p>
+    </div>
+
+    <div>
+      <h3>Ownership & Credits</h3>
+      <p class="footer-copy">
+        Powered by RankTracker Studio<br>
+        © 2026 Awais Yaseen. All rights reserved.
+      </p>
+    </div>
+
+  </div>
+</footer>
 
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script>
@@ -1052,6 +1109,10 @@ function updateDashboard(metrics = {}) {
     outputNoteEl.textContent = metrics.outputNote
       || "Domain mode generates `domain:example.com` lines. Exact URL mode keeps only valid URL entries.";
   }
+  document.querySelectorAll(".metric-card").forEach((el) => {
+  el.classList.add("updated");
+  setTimeout(() => el.classList.remove("updated"), 200);
+});
 }
 
 function normalizeHeader(value) {
@@ -1645,6 +1706,7 @@ function readFile(file) {
       }
 
       state.fileName = file.name;
+      document.querySelector("#dropzone").classList.add("success");
       state.errorMessage = "";
       if (!isExcelFile(file)) {
         state.useHeader = detectHeader(parseDelimitedText(state.rawText, detectDelimiter(state.rawText) || "\t"));
