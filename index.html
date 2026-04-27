@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disavow File Builder</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f5f7fb;
+  --bg-2: #edf2fb;
+  --panel: rgba(255, 255, 255, 0.84);
+  --panel-strong: #ffffff;
+  --panel-muted: rgba(244, 247, 252, 0.92);
+  --ink: #142136;
+  --muted: #5c6b87;
+  --line: rgba(20, 33, 54, 0.1);
+  --brand: #1f6feb;
+  --brand-strong: #174fc3;
+  --brand-soft: rgba(31, 111, 235, 0.12);
+  --teal: #0f9d8a;
+  --teal-soft: rgba(15, 157, 138, 0.12);
+  --gold: #e8a318;
+  --gold-soft: rgba(232, 163, 24, 0.14);
+  --rose: #d1436d;
+  --rose-soft: rgba(209, 67, 109, 0.12);
+  --shadow-lg: 0 24px 80px rgba(29, 48, 84, 0.14);
+  --shadow-md: 0 16px 34px rgba(29, 48, 84, 0.1);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --font-ui: "Segoe UI", "Aptos", "Helvetica Neue", sans-serif;
+  --font-display: "Georgia", "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(31, 111, 235, 0.14), transparent 26%),
+    radial-gradient(circle at 100% 0%, rgba(15, 157, 138, 0.14), transparent 22%),
+    linear-gradient(180deg, #f7faff 0%, var(--bg) 44%, var(--bg-2) 100%);
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.9), transparent 20%),
+    radial-gradient(circle at 82% 14%, rgba(223, 236, 255, 0.8), transparent 18%);
+  z-index: -1;
+}
+
+.shell {
+  width: min(1240px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(18px);
+  background: rgba(245, 248, 253, 0.78);
+  border-bottom: 1px solid rgba(20, 33, 54, 0.06);
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, var(--brand) 0%, #4b93ff 100%);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.brand-kicker,
+.section-kicker,
+.card-eyebrow,
+.footer-kicker {
+  margin: 0 0 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--brand-strong);
+  letter-spacing: 0.04em;
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.header-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.header-nav a,
+.primary-link,
+.secondary-link {
+  text-decoration: none;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.header-nav a {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 33, 54, 0.08);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.56);
+  font-size: 0.94rem;
+}
+
+.header-nav a:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.file-button:hover,
+.ghost-button:hover,
+.primary-button:hover {
+  transform: translateY(-1px);
+}
+
+.page-shell {
+  padding: 34px 0 56px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 420px);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.hero-copy,
+.hero-card,
+.panel,
+.workflow-step {
+  border: 1px solid rgba(20, 33, 54, 0.08);
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(14px);
+}
+
+.hero-copy {
+  padding: 34px;
+  border-radius: 30px;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hero-copy h2 {
+  margin: 0;
+  max-width: 12ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.intro {
+  max-width: 760px;
+  margin: 20px 0 0;
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.primary-link,
+.secondary-link,
+.file-button,
+.ghost-button,
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-link,
+.file-button,
+.primary-button {
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand) 0%, #4b93ff 100%);
+  box-shadow: 0 14px 30px rgba(31, 111, 235, 0.2);
+}
+
+.secondary-link,
+.ghost-button {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.64);
+  border-color: rgba(20, 33, 54, 0.1);
+}
+
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.feature-pill,
+.metric-card,
+.field-card,
+.toggle {
+  border: 1px solid rgba(20, 33, 54, 0.08);
+  background: var(--panel-muted);
+}
+
+.feature-pill {
+  padding: 16px 18px;
+  border-radius: 18px;
+}
+
+.feature-label,
+.metric-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.feature-pill strong {
+  font-size: 1rem;
+}
+
+.hero-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 30px;
+  padding: 26px;
+}
+
+.hero-card-head,
+.panel-head,
+.subhead,
+.actions,
+.footer-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.hero-card-head h3,
+.panel-head h2,
+.workflow-step h3,
+.footer-grid h3,
+.subhead h3 {
+  margin: 0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.metric-card {
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.metric-card strong {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.hero-card-foot {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(31, 111, 235, 0.08), rgba(15, 157, 138, 0.1));
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.hero-card-foot p {
+  margin: 0;
+}
+
+.status-pill,
+.helper-chip,
+.dropzone-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.status-pill.is-idle,
+.helper-chip {
+  background: var(--gold-soft);
+  color: #8d6110;
+}
+
+.status-pill.is-ready {
+  background: var(--teal-soft);
+  color: #0d7467;
+}
+
+.status-pill.is-error {
+  background: var(--rose-soft);
+  color: #ad2e58;
+}
+
+.workflow-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.workflow-step {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 24px;
+}
+
+.workflow-step p,
+.footer-copy {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.workflow-number {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(31, 111, 235, 0.14), rgba(15, 157, 138, 0.16));
+  color: var(--brand-strong);
+  font-weight: 700;
+}
+
+.workspace,
+.results {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.panel {
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.section-kicker {
+  margin-bottom: 6px;
+}
+
+.panel-head h2 {
+  font-size: 1.18rem;
+}
+
+#file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dropzone {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  min-height: 220px;
+  margin-top: 18px;
+  padding: 28px;
+  border: 1.5px dashed rgba(31, 111, 235, 0.34);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(240, 246, 255, 0.92)),
+    var(--panel-muted);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.dropzone:hover,
+.dropzone.dragover {
+  border-color: var(--brand);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.dropzone-badge {
+  background: rgba(31, 111, 235, 0.1);
+  color: var(--brand-strong);
+}
+
+.dropzone-title {
+  max-width: 18ch;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.dropzone-text,
+.muted,
+.dropzone-file,
+.output-note {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.dropzone-file {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.manual-entry {
+  margin-top: 22px;
+}
+
+.subhead {
+  margin-bottom: 14px;
+}
+
+.inline-note {
+  margin: 6px 0 0;
+}
+
+textarea,
+input[type="text"],
+select {
+  width: 100%;
+  border: 1px solid rgba(20, 33, 54, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--ink);
+  font: inherit;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(31, 111, 235, 0.36);
+  box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.1);
+  background: #fff;
+}
+
+textarea {
+  min-height: 190px;
+  padding: 16px 18px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+input[type="text"],
+select {
+  margin-top: 8px;
+  padding: 12px 14px;
+}
+
+.control-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.field-card {
+  display: block;
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.field-card > span:first-child {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.toggle input {
+  margin: 0;
+}
+
+.summary {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(31, 111, 235, 0.09), rgba(15, 157, 138, 0.09));
+  line-height: 1.7;
+}
+
+.table-wrap {
+  overflow: auto;
+  margin-top: 18px;
+  border: 1px solid rgba(20, 33, 54, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(20, 33, 54, 0.08);
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.93rem;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #f7faff;
+  font-weight: 700;
+}
+
+.empty-state {
+  color: var(--muted);
+}
+
+.output-panel {
+  min-height: 100%;
+}
+
+.output-note {
+  margin: 16px 0 0;
+  line-height: 1.65;
+}
+
+.output {
+  min-height: 500px;
+  margin: 14px 0 0;
+  padding: 18px;
+  overflow: auto;
+  border: 1px solid rgba(20, 33, 54, 0.1);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, #0d1831 0%, #112247 100%);
+  color: #f1f7ff;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.site-footer {
+  padding: 0 0 42px;
+}
+
+.footer-grid {
+  align-items: start;
+  padding: 22px 24px;
+  border: 1px solid rgba(20, 33, 54, 0.08);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow-md);
+}
+
+.footer-grid > div {
+  flex: 1 1 0;
+}
+
+@media (max-width: 1100px) {
+  .hero,
+  .workspace,
+  .results {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy h2 {
+    max-width: 14ch;
+  }
+}
+
+@media (max-width: 860px) {
+  .workflow-strip,
+  .feature-row,
+  .metrics-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    display: grid;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    width: min(100% - 20px, 100%);
+  }
+
+  .header-bar,
+  .panel-head,
+  .subhead {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-nav,
+  .hero-actions,
+  .actions {
+    width: 100%;
+  }
+
+  .header-nav a,
+  .primary-link,
+  .secondary-link,
+  .file-button,
+  .ghost-button,
+  .primary-button {
+    width: 100%;
+  }
+
+  .hero-copy,
+  .hero-card,
+  .panel {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .hero-copy h2 {
+    font-size: clamp(2.2rem, 10vw, 3.4rem);
+    max-width: none;
+  }
+
+  .output {
+    min-height: 340px;
+  }
+}
+
+</style>
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell header-bar">
+      <div class="brand">
+        <span class="brand-mark">DF</span>
+        <div>
+          <p class="brand-kicker">SEO Workflow Utility</p>
+          <h1 class="brand-name">Disavow File Builder</h1>
+        </div>
+      </div>
+
+      <nav class="header-nav" aria-label="Sections">
+        <a href="#workspace">Upload</a>
+        <a href="#review">Review</a>
+        <a href="#export">Export</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Google Search Console Preparation</p>
+        <h2>Transform backlink exports into a clean disavow submission file.</h2>
+        <p class="intro">
+          Built for SEO teams who export backlinks from Ahrefs, SEMrush, or spreadsheets and need
+          a faster path to a valid disavow text file. Upload, inspect, switch between domain and
+          exact URL modes, and export the final list with confidence.
+        </p>
+
+        <div class="hero-actions">
+          <a class="primary-link" href="#workspace">Start with a File</a>
+          <a class="secondary-link" href="#export">Jump to Output</a>
+        </div>
+
+        <div class="feature-row">
+          <article class="feature-pill">
+            <span class="feature-label">Imports</span>
+            <strong>Excel, CSV, TSV, TXT</strong>
+          </article>
+          <article class="feature-pill">
+            <span class="feature-label">Modes</span>
+            <strong>Domain and exact URL</strong>
+          </article>
+          <article class="feature-pill">
+            <span class="feature-label">Workflow</span>
+            <strong>Detect, review, export</strong>
+          </article>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <div class="hero-card-head">
+          <div>
+            <p class="card-eyebrow">Live workspace</p>
+            <h3>Current session</h3>
+          </div>
+          <span class="status-pill is-idle" id="status-pill">Waiting for data</span>
+        </div>
+
+        <div class="metrics-grid">
+          <article class="metric-card">
+            <span class="metric-label">Rows loaded</span>
+            <strong id="metric-rows">0</strong>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Valid entries</span>
+            <strong id="metric-valid">0</strong>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Ignored</span>
+            <strong id="metric-ignored">0</strong>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Mode</span>
+            <strong id="metric-mode">Domain</strong>
+          </article>
+        </div>
+
+        <div class="hero-card-foot">
+          <p id="hero-note">Drop a backlink export or paste links to begin.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="workflow-strip" aria-label="Workflow steps">
+      <article class="workflow-step">
+        <span class="workflow-number">01</span>
+        <div>
+          <h3>Import</h3>
+          <p>Load exports from SEO tools or paste a custom list.</p>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="workflow-number">02</span>
+        <div>
+          <h3>Review</h3>
+          <p>Confirm the right sheet, source column, and output mode.</p>
+        </div>
+      </article>
+      <article class="workflow-step">
+        <span class="workflow-number">03</span>
+        <div>
+          <h3>Export</h3>
+          <p>Download a `.txt` file ready for the disavow tool.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="workspace" id="workspace">
+      <div class="panel panel-input">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Step 1</p>
+            <h2>Add backlink data</h2>
+          </div>
+          <label class="file-button" for="file-input">Upload Export</label>
+          <input id="file-input" type="file" accept=".csv,.tsv,.txt,.xlsx,.xls,.xlsm">
+        </div>
+
+        <label class="dropzone" id="dropzone" for="file-input">
+          <span class="dropzone-badge">Drag and drop supported</span>
+          <span class="dropzone-title">Choose a workbook, spreadsheet, or text export</span>
+          <span class="dropzone-text">Excel, CSV, TSV, TXT, or one URL/domain per line</span>
+          <span class="dropzone-file" id="dropzone-file">No file selected yet</span>
+        </label>
+
+        <div class="manual-entry">
+          <div class="subhead">
+            <div>
+              <h3>Paste rows directly</h3>
+              <p class="muted inline-note">The tool auto-processes as you paste or type.</p>
+            </div>
+            <button id="load-text" type="button" class="ghost-button">Refresh from Text</button>
+          </div>
+          <textarea
+            id="text-input"
+            spellcheck="false"
+            placeholder="Paste backlink rows, domains, or URLs here..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="panel panel-controls" id="review">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Step 2</p>
+            <h2>Review the mapping</h2>
+          </div>
+          <span class="helper-chip" id="helper-chip">Awaiting import</span>
+        </div>
+
+        <div class="control-grid">
+          <label class="field-card">
+            <span>Detected input</span>
+            <input id="detected-format" type="text" readonly value="No file loaded">
+          </label>
+
+          <label class="field-card">
+            <span>Workbook sheet</span>
+            <select id="sheet-select" disabled>
+              <option>No workbook loaded</option>
+            </select>
+          </label>
+
+          <label class="field-card">
+            <span>Source column</span>
+            <select id="source-column" disabled>
+              <option>No columns available</option>
+            </select>
+          </label>
+
+          <label class="field-card">
+            <span>Output mode</span>
+            <select id="output-mode">
+              <option value="domain">Disavow by domain</option>
+              <option value="url">Disavow exact URLs</option>
+            </select>
+          </label>
+
+          <label class="toggle">
+            <input id="has-header" type="checkbox" checked>
+            <span>Treat first row as a header row</span>
+          </label>
+
+          <label class="toggle">
+            <input id="strip-www" type="checkbox" checked>
+            <span>Strip leading <code>www.</code> from domain directives</span>
+          </label>
+
+          <label class="toggle">
+            <input id="include-comments" type="checkbox" checked>
+            <span>Add summary comments at the top of the exported file</span>
+          </label>
+        </div>
+
+        <div class="summary" id="summary">
+          Load an export to see detected columns, valid rows, and ignored lines.
+        </div>
+      </div>
+    </section>
+
+    <section class="results">
+      <div class="panel" id="preview">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Step 3</p>
+            <h2>Preview parsed rows</h2>
+          </div>
+          <span class="muted" id="preview-meta">No preview yet</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead id="preview-head"></thead>
+            <tbody id="preview-body">
+              <tr>
+                <td class="empty-state">Your parsed rows will appear here.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel output-panel" id="export">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Ready to export</p>
+            <h2>Disavow output</h2>
+          </div>
+          <div class="actions">
+            <button id="copy-output" type="button" class="ghost-button" disabled>Copy Output</button>
+            <button id="download-output" type="button" class="primary-button" disabled>Download TXT</button>
+          </div>
+        </div>
+
+        <p class="output-note" id="output-note">
+          Domain mode generates `domain:example.com` lines. Exact URL mode keeps only valid URL entries.
+        </p>
+        <pre id="output" class="output">The generated disavow text will appear here.</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-grid">
+      <div>
+        <p class="footer-kicker">Disavow File Builder</p>
+        <p class="footer-copy">
+          Designed to help SEO specialists clean exports before submitting them in Google Search Console.
+        </p>
+      </div>
+
+      <div>
+        <h3>Best use cases</h3>
+        <p class="footer-copy">Referring domains, toxic backlink reviews, manual URL disavow lists, and multi-sheet exports.</p>
+      </div>
+
+      <div>
+        <h3>Reminder</h3>
+        <p class="footer-copy">Always review the final output before submitting it through the disavow tool.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script>
+const state = {
+  rawText: "",
+  fileName: "",
+  delimiter: "",
+  parsedRows: [],
+  workbookSheetName: "",
+  workbookSheets: [],
+  selectedSheetIndex: 0,
+  useHeader: true,
+  sourceColumnIndex: null,
+  outputMode: "domain",
+  stripWww: true,
+  includeComments: true,
+  errorMessage: "",
+  result: null,
+};
+
+const headerKeywords = [
+  { pattern: /referring domain|source domain|linking domain|root domain|domain/i, score: 6 },
+  { pattern: /referring page|source page|backlink|page url|source url|link url|from url|url from|url/i, score: 5 },
+  { pattern: /anchor/i, score: 2 },
+  { pattern: /toxic|score|type|status|first seen|last seen|country|traffic/i, score: -4 },
+  { pattern: /target|destination|landing|money page|url to|to url/i, score: -6 },
+];
+
+function setStatusPill(element, text, variant) {
+  if (!element) {
+    return;
+  }
+
+  element.textContent = text;
+  element.classList.remove("is-idle", "is-ready", "is-error");
+  element.classList.add(variant);
+}
+
+function updateDashboard(metrics = {}) {
+  const rowsEl = document.querySelector("#metric-rows");
+  const validEl = document.querySelector("#metric-valid");
+  const ignoredEl = document.querySelector("#metric-ignored");
+  const modeEl = document.querySelector("#metric-mode");
+  const heroNoteEl = document.querySelector("#hero-note");
+  const helperChipEl = document.querySelector("#helper-chip");
+  const dropzoneFileEl = document.querySelector("#dropzone-file");
+  const outputNoteEl = document.querySelector("#output-note");
+
+  if (rowsEl) {
+    rowsEl.textContent = String(metrics.rows ?? 0);
+  }
+  if (validEl) {
+    validEl.textContent = String(metrics.valid ?? 0);
+  }
+  if (ignoredEl) {
+    ignoredEl.textContent = String(metrics.ignored ?? 0);
+  }
+  if (modeEl) {
+    modeEl.textContent = metrics.modeLabel || "Domain";
+  }
+  if (heroNoteEl) {
+    heroNoteEl.textContent = metrics.heroNote || "Drop a backlink export or paste links to begin.";
+  }
+  if (helperChipEl) {
+    helperChipEl.textContent = metrics.helperText || "Awaiting import";
+  }
+  if (dropzoneFileEl) {
+    dropzoneFileEl.textContent = metrics.fileText || "No file selected yet";
+  }
+  if (outputNoteEl) {
+    outputNoteEl.textContent = metrics.outputNote
+      || "Domain mode generates `domain:example.com` lines. Exact URL mode keeps only valid URL entries.";
+  }
+}
+
+function normalizeHeader(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function detectDelimiter(text) {
+  const firstChunk = text.split(/\r?\n/).slice(0, 6).join("\n");
+  const options = [",", "\t", ";", "|"];
+  let best = "";
+  let bestScore = 0;
+
+  for (const delimiter of options) {
+    const rows = parseDelimitedText(firstChunk, delimiter).filter((row) => row.some((cell) => cell.trim() !== ""));
+    const widths = rows.map((row) => row.length).filter((length) => length > 1);
+    if (!widths.length) {
+      continue;
+    }
+    const min = Math.min(...widths);
+    const max = Math.max(...widths);
+    const score = min * 10 - (max - min);
+    if (score > bestScore) {
+      bestScore = score;
+      best = delimiter;
+    }
+  }
+
+  return best;
+}
+
+function rowsToText(rows) {
+  return rows
+    .map((row) => row.map((cell) => String(cell ?? "")).join("\t"))
+    .join("\n");
+}
+
+function isExcelFile(file) {
+  return /\.(xlsx|xls|xlsm)$/i.test(file.name);
+}
+
+function parseExcelBuffer(buffer) {
+  if (typeof window === "undefined" || !window.XLSX) {
+    throw new Error("Excel support is not available because the spreadsheet parser did not load.");
+  }
+
+  const workbook = window.XLSX.read(buffer, { type: "array" });
+  if (!workbook.SheetNames.length) {
+    throw new Error("The workbook does not contain any sheets.");
+  }
+
+  const sheets = workbook.SheetNames.map((sheetName) => {
+    const worksheet = workbook.Sheets[sheetName];
+    const rows = window.XLSX.utils.sheet_to_json(worksheet, {
+      header: 1,
+      blankrows: false,
+      raw: false,
+      defval: "",
+    });
+    const text = rowsToText(rows);
+    const analysis = analyzeRows(text);
+    const headerScore = (analysis.headers || []).reduce((sum, header) => sum + Math.max(scoreHeader(header), 0), 0);
+    const signalScore = (analysis.dataRows.length * 5) + headerScore;
+
+    return {
+      name: sheetName,
+      text,
+      rowCount: analysis.dataRows.length,
+      headerScore,
+      signalScore,
+    };
+  });
+
+  const populatedSheets = sheets.filter((sheet) => sheet.text.trim() !== "");
+  if (!populatedSheets.length) {
+    throw new Error("The workbook sheets are empty.");
+  }
+
+  let bestSheetIndex = 0;
+  let bestSheetScore = Number.NEGATIVE_INFINITY;
+  sheets.forEach((sheet, index) => {
+    if (sheet.signalScore > bestSheetScore) {
+      bestSheetScore = sheet.signalScore;
+      bestSheetIndex = index;
+    }
+  });
+
+  return {
+    sheets,
+    selectedSheetIndex: bestSheetIndex,
+  };
+}
+
+function parseDelimitedText(text, delimiter) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const next = text[index + 1];
+
+    if (character === "\"") {
+      if (inQuotes && next === "\"") {
+        cell += "\"";
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (!inQuotes && character === delimiter) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if (!inQuotes && (character === "\n" || character === "\r")) {
+      if (character === "\r" && next === "\n") {
+        index += 1;
+      }
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+      continue;
+    }
+
+    cell += character;
+  }
+
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell);
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+function looksLikeUrl(value) {
+  return /^(https?:)?\/\//i.test(value) || /^[a-z0-9.-]+\.[a-z]{2,}(\/|$)/i.test(value);
+}
+
+function looksLikeDomain(value) {
+  return /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(value.trim());
+}
+
+function normalizeUrl(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  let candidate = trimmed;
+  if (!/^[a-z]+:\/\//i.test(candidate) && /^[a-z0-9.-]+\.[a-z]{2,}/i.test(candidate)) {
+    candidate = `https://${candidate}`;
+  }
+
+  try {
+    const parsed = new URL(candidate);
+    parsed.hash = "";
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+function normalizeExactUrl(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const hasProtocol = /^[a-z]+:\/\//i.test(trimmed);
+  const hasPathOrQueryWithoutProtocol = /^[a-z0-9.-]+\.[a-z]{2,}(\/|\?)/i.test(trimmed);
+
+  if (!hasProtocol && !hasPathOrQueryWithoutProtocol) {
+    return null;
+  }
+
+  return normalizeUrl(trimmed);
+}
+
+function normalizeDomain(value, stripWww = true) {
+  const trimmed = String(value || "").trim().toLowerCase();
+  if (!trimmed) {
+    return null;
+  }
+
+  let hostname = trimmed;
+
+  if (looksLikeUrl(trimmed)) {
+    const normalized = normalizeUrl(trimmed);
+    if (!normalized) {
+      return null;
+    }
+    hostname = new URL(normalized).hostname.toLowerCase();
+  }
+
+  hostname = hostname
+    .replace(/:\d+$/, "")
+    .replace(/\.$/, "")
+    .replace(/\s+/g, "");
+
+  if (stripWww) {
+    hostname = hostname.replace(/^www\./, "");
+  }
+
+  return looksLikeDomain(hostname) ? hostname : null;
+}
+
+function scoreHeader(cell) {
+  const normalized = normalizeHeader(cell);
+  return headerKeywords.reduce((score, item) => {
+    return score + (item.pattern.test(normalized) ? item.score : 0);
+  }, 0);
+}
+
+function detectHeader(rows) {
+  if (!rows.length) {
+    return false;
+  }
+
+  const firstRow = rows[0];
+  const scores = firstRow.map(scoreHeader);
+  return scores.some((score) => score > 0);
+}
+
+function pickSourceColumn(headers) {
+  if (!headers.length) {
+    return 0;
+  }
+
+  let bestIndex = 0;
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  headers.forEach((header, index) => {
+    const score = scoreHeader(header);
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = index;
+    }
+  });
+
+  return bestIndex;
+}
+
+function analyzeRows(rawText, options = {}) {
+  const delimiter = detectDelimiter(rawText);
+  let parsedRows = delimiter
+    ? parseDelimitedText(rawText, delimiter)
+    : rawText.split(/\r?\n/).map((line) => [line]);
+
+  parsedRows = parsedRows
+    .map((row) => row.map((cell) => String(cell || "").trim()))
+    .filter((row) => row.some((cell) => cell !== ""));
+
+  const useHeader = options.useHeader ?? detectHeader(parsedRows);
+  const headerRow = useHeader ? parsedRows[0] || [] : [];
+  const dataRows = useHeader ? parsedRows.slice(1) : parsedRows;
+  const normalizedHeaders = headerRow.length
+    ? headerRow
+    : dataRows[0]?.map((_, index) => `Column ${index + 1}`) || [];
+  const sourceColumnIndex = options.sourceColumnIndex ?? pickSourceColumn(normalizedHeaders);
+
+  return {
+    delimiter: delimiter || "line list",
+    parsedRows,
+    useHeader,
+    headers: normalizedHeaders,
+    dataRows,
+    sourceColumnIndex,
+  };
+}
+
+function buildDisavowText(analysis, options = {}) {
+  const outputMode = options.outputMode || "domain";
+  const stripWww = options.stripWww ?? true;
+  const includeComments = options.includeComments ?? true;
+  const sourceColumnIndex = options.sourceColumnIndex ?? analysis.sourceColumnIndex ?? 0;
+
+  const lines = [];
+  const ignored = [];
+  const preview = [];
+  const dedupe = new Set();
+
+  for (const row of analysis.dataRows) {
+    const rawValue = String(row[sourceColumnIndex] || "").trim();
+    if (!rawValue) {
+      ignored.push({ value: rawValue, reason: "Blank row" });
+      continue;
+    }
+
+    let outputValue = null;
+    if (outputMode === "url") {
+      outputValue = normalizeExactUrl(rawValue);
+    } else {
+      const normalizedDomain = normalizeDomain(rawValue, stripWww);
+      outputValue = normalizedDomain ? `domain:${normalizedDomain}` : null;
+    }
+
+    if (!outputValue) {
+      const reason = outputMode === "url"
+        ? "Exact URL mode only accepts full URLs or domain/path values"
+        : "Could not recognize URL or domain";
+      ignored.push({ value: rawValue, reason });
+      continue;
+    }
+
+    if (dedupe.has(outputValue)) {
+      continue;
+    }
+
+    dedupe.add(outputValue);
+    lines.push(outputValue);
+    preview.push({
+      source: rawValue,
+      output: outputValue,
+      row,
+    });
+  }
+
+  const header = [];
+  if (includeComments) {
+    const modeLabel = outputMode === "domain" ? "domain directives" : "exact URLs";
+    header.push(`# Disavow file generated by Disavow File Builder`);
+    header.push(`# ${lines.length} unique entries prepared as ${modeLabel}`);
+    header.push(`# Review before submission in Google Search Console`);
+    header.push("");
+  }
+
+  return {
+    text: [...header, ...lines].join("\n"),
+    lines,
+    ignored,
+    preview,
+  };
+}
+
+function formatDelimiterLabel(delimiter) {
+  if (delimiter === "\t") {
+    return "TSV / tab-separated";
+  }
+  if (delimiter === ",") {
+    return "CSV / comma-separated";
+  }
+  if (delimiter === ";") {
+    return "Semicolon-separated";
+  }
+  if (delimiter === "|") {
+    return "Pipe-separated";
+  }
+  return "One value per line";
+}
+
+function renderTable(analysis, result) {
+  const previewHead = document.querySelector("#preview-head");
+  const previewBody = document.querySelector("#preview-body");
+  const previewMeta = document.querySelector("#preview-meta");
+
+  if (!analysis || !result) {
+    previewHead.innerHTML = "";
+    previewBody.innerHTML = "<tr><td class=\"empty-state\">Your parsed rows will appear here.</td></tr>";
+    previewMeta.textContent = "No preview yet";
+    return;
+  }
+
+  const columns = analysis.headers.length
+    ? analysis.headers
+    : analysis.dataRows[0]?.map((_, index) => `Column ${index + 1}`) || [];
+
+  previewHead.innerHTML = `
+    <tr>
+      ${columns.slice(0, 4).map((cell) => `<th>${escapeHtml(cell)}</th>`).join("")}
+      <th>Output</th>
+    </tr>
+  `;
+
+  const rows = result.preview.slice(0, 12);
+  if (!rows.length) {
+    previewBody.innerHTML = "<tr><td class=\"empty-state\" colspan=\"5\">No valid rows detected yet.</td></tr>";
+    previewMeta.textContent = "0 valid rows";
+    return;
+  }
+
+  previewBody.innerHTML = rows.map((item) => {
+    const visibleCells = item.row.slice(0, 4)
+      .map((cell) => `<td>${escapeHtml(cell || "")}</td>`)
+      .join("");
+    return `<tr>${visibleCells}<td>${escapeHtml(item.output)}</td></tr>`;
+  }).join("");
+
+  previewMeta.textContent = `${result.preview.length} valid rows, showing ${rows.length}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function applyWorkbookSheet(index) {
+  const sheet = state.workbookSheets[index];
+  if (!sheet) {
+    state.rawText = "";
+    state.workbookSheetName = "";
+    return;
+  }
+
+  state.selectedSheetIndex = index;
+  state.workbookSheetName = sheet.name;
+  state.rawText = sheet.text;
+  state.useHeader = detectHeader(parseDelimitedText(state.rawText, detectDelimiter(state.rawText) || "\t"));
+  state.sourceColumnIndex = null;
+  const hasHeader = document.querySelector("#has-header");
+  if (hasHeader) {
+    hasHeader.checked = state.useHeader;
+  }
+}
+
+function refresh() {
+  const outputEl = document.querySelector("#output");
+  const summaryEl = document.querySelector("#summary");
+  const sheetSelectEl = document.querySelector("#sheet-select");
+  const sourceColumnEl = document.querySelector("#source-column");
+  const detectedFormatEl = document.querySelector("#detected-format");
+  const statusPillEl = document.querySelector("#status-pill");
+  const copyButton = document.querySelector("#copy-output");
+  const downloadButton = document.querySelector("#download-output");
+  const textInput = document.querySelector("#text-input");
+  const modeLabel = state.outputMode === "url" ? "Exact URL" : "Domain";
+
+  if (!state.rawText.trim()) {
+    outputEl.textContent = "The generated disavow text will appear here.";
+    summaryEl.textContent = state.errorMessage || "Load an export to see detected columns, valid rows, and ignored lines.";
+    detectedFormatEl.value = state.fileName ? `Could not parse ${state.fileName}` : "No file loaded";
+    setStatusPill(statusPillEl, state.errorMessage ? "Could not read file" : "Waiting for data", state.errorMessage ? "is-error" : "is-idle");
+    sheetSelectEl.disabled = true;
+    sheetSelectEl.innerHTML = "<option>No workbook loaded</option>";
+    sourceColumnEl.disabled = true;
+    copyButton.disabled = true;
+    downloadButton.disabled = true;
+    if (state.errorMessage) {
+      textInput.setAttribute("aria-invalid", "true");
+    } else {
+      textInput.removeAttribute("aria-invalid");
+    }
+    updateDashboard({
+      rows: 0,
+      valid: 0,
+      ignored: 0,
+      modeLabel,
+      heroNote: state.errorMessage || "Drop a backlink export or paste links to begin.",
+      helperText: state.errorMessage ? "Import error" : "Awaiting import",
+      fileText: state.fileName || "No file selected yet",
+      outputNote: state.outputMode === "url"
+        ? "Exact URL mode exports only valid URL lines. Bare domains are intentionally ignored."
+        : "Domain mode generates `domain:example.com` directives for Search Console submissions.",
+    });
+    renderTable(null, null);
+    return;
+  }
+
+  state.errorMessage = "";
+  textInput.removeAttribute("aria-invalid");
+
+  const analysis = analyzeRows(state.rawText, {
+    useHeader: state.useHeader,
+    sourceColumnIndex: state.sourceColumnIndex,
+  });
+
+  state.parsedRows = analysis.parsedRows;
+  state.delimiter = analysis.delimiter;
+
+  if (state.workbookSheets.length) {
+    sheetSelectEl.disabled = false;
+    sheetSelectEl.innerHTML = state.workbookSheets
+      .map((sheet, index) => {
+        const selected = index === state.selectedSheetIndex ? "selected" : "";
+        const summary = `${sheet.name} (${sheet.rowCount} rows)`;
+        return `<option value="${index}" ${selected}>${escapeHtml(summary)}</option>`;
+      })
+      .join("");
+  } else {
+    sheetSelectEl.disabled = true;
+    sheetSelectEl.innerHTML = "<option>No workbook loaded</option>";
+  }
+
+  sourceColumnEl.disabled = false;
+  sourceColumnEl.innerHTML = analysis.headers
+    .map((header, index) => {
+      const selected = index === analysis.sourceColumnIndex ? "selected" : "";
+      return `<option value="${index}" ${selected}>${escapeHtml(header)}</option>`;
+    })
+    .join("");
+
+  const result = buildDisavowText(analysis, {
+    outputMode: state.outputMode,
+    stripWww: state.stripWww,
+    includeComments: state.includeComments,
+    sourceColumnIndex: Number(sourceColumnEl.value || analysis.sourceColumnIndex),
+  });
+
+  state.result = result;
+  outputEl.textContent = result.text || "No valid entries were produced.";
+  const originBits = [
+    formatDelimiterLabel(analysis.delimiter),
+    state.workbookSheetName ? `sheet ${state.workbookSheetName}` : "",
+    state.fileName ? `from ${state.fileName}` : "",
+  ].filter(Boolean);
+  detectedFormatEl.value = originBits.join(" ");
+  setStatusPill(statusPillEl, result.lines.length ? "Ready to export" : "Needs review", result.lines.length ? "is-ready" : "is-idle");
+  summaryEl.innerHTML = [
+    `<strong>${result.lines.length}</strong> unique disavow lines prepared.`,
+    `<strong>${result.ignored.length}</strong> rows ignored.`,
+    state.workbookSheetName ? `Reading <strong>${escapeHtml(state.workbookSheetName)}</strong>.` : "",
+    `Using <strong>${escapeHtml(analysis.headers[Number(sourceColumnEl.value) || 0] || "Column 1")}</strong> as the source column.`,
+  ].join(" ");
+
+  updateDashboard({
+    rows: analysis.dataRows.length,
+    valid: result.lines.length,
+    ignored: result.ignored.length,
+    modeLabel,
+    heroNote: state.workbookSheetName
+      ? `Working from the ${state.workbookSheetName} sheet in ${state.fileName}.`
+      : state.fileName
+        ? `Processing ${state.fileName} and preparing a ${modeLabel.toLowerCase()} disavow list.`
+        : "Using pasted rows as the current input source.",
+    helperText: state.workbookSheets.length
+      ? `${state.workbookSheets.length} workbook sheets detected`
+      : state.fileName === "pasted-data.txt"
+        ? "Using pasted rows"
+        : "Flat file loaded",
+    fileText: state.fileName || "No file selected yet",
+    outputNote: state.outputMode === "url"
+      ? "Exact URL mode keeps only valid URLs such as `https://site.com/spam-page`. Bare domains are ignored on purpose."
+      : "Domain mode exports entries like `domain:example.com`, which is the usual format for sitewide disavow directives.",
+  });
+
+  copyButton.disabled = result.lines.length === 0;
+  downloadButton.disabled = result.lines.length === 0;
+  renderTable(analysis, result);
+}
+
+function applyPastedText(rawValue) {
+  state.rawText = rawValue;
+  state.fileName = rawValue.trim() ? "pasted-data.txt" : "";
+  state.workbookSheetName = "";
+  state.workbookSheets = [];
+  state.selectedSheetIndex = 0;
+  state.errorMessage = "";
+
+  if (!rawValue.trim()) {
+    state.parsedRows = [];
+    state.result = null;
+    refresh();
+    return;
+  }
+
+  state.useHeader = detectHeader(parseDelimitedText(state.rawText, detectDelimiter(state.rawText) || ","));
+  state.sourceColumnIndex = null;
+  const hasHeader = document.querySelector("#has-header");
+  if (hasHeader) {
+    hasHeader.checked = state.useHeader;
+  }
+  refresh();
+}
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      if (isExcelFile(file)) {
+        const parsedWorkbook = parseExcelBuffer(reader.result);
+        state.workbookSheets = parsedWorkbook.sheets;
+        applyWorkbookSheet(parsedWorkbook.selectedSheetIndex);
+      } else {
+        state.rawText = String(reader.result || "");
+        state.workbookSheetName = "";
+        state.workbookSheets = [];
+        state.selectedSheetIndex = 0;
+      }
+
+      state.fileName = file.name;
+      state.errorMessage = "";
+      if (!isExcelFile(file)) {
+        state.useHeader = detectHeader(parseDelimitedText(state.rawText, detectDelimiter(state.rawText) || "\t"));
+        state.sourceColumnIndex = null;
+        document.querySelector("#has-header").checked = state.useHeader;
+      }
+      refresh();
+    } catch (error) {
+      state.rawText = "";
+      state.fileName = file.name;
+      state.workbookSheetName = "";
+      state.workbookSheets = [];
+      state.selectedSheetIndex = 0;
+      state.errorMessage = String(error.message || error);
+      refresh();
+    }
+  };
+
+  if (isExcelFile(file)) {
+    reader.readAsArrayBuffer(file);
+    return;
+  }
+
+  reader.readAsText(file);
+}
+
+function downloadOutput() {
+  if (!state.result?.text) {
+    return;
+  }
+
+  const blob = new Blob([state.result.text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = state.fileName
+    ? `${state.fileName.replace(/\.[^.]+$/, "")}-disavow.txt`
+    : "disavow.txt";
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function copyOutput() {
+  if (!state.result?.text) {
+    return;
+  }
+
+  await navigator.clipboard.writeText(state.result.text);
+  const copyButton = document.querySelector("#copy-output");
+  const previous = copyButton.textContent;
+  copyButton.textContent = "Copied";
+  window.setTimeout(() => {
+    copyButton.textContent = previous;
+  }, 1600);
+}
+
+function init() {
+  const fileInput = document.querySelector("#file-input");
+  const textInput = document.querySelector("#text-input");
+  const loadTextButton = document.querySelector("#load-text");
+  const hasHeader = document.querySelector("#has-header");
+  const stripWww = document.querySelector("#strip-www");
+  const includeComments = document.querySelector("#include-comments");
+  const outputMode = document.querySelector("#output-mode");
+  const sheetSelect = document.querySelector("#sheet-select");
+  const sourceColumn = document.querySelector("#source-column");
+  const downloadButton = document.querySelector("#download-output");
+  const copyButton = document.querySelector("#copy-output");
+  const dropzone = document.querySelector("#dropzone");
+  let pasteUpdateTimer = null;
+
+  fileInput.addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      readFile(file);
+    }
+  });
+
+  loadTextButton.addEventListener("click", () => {
+    applyPastedText(textInput.value);
+  });
+
+  textInput.addEventListener("input", () => {
+    if (pasteUpdateTimer) {
+      window.clearTimeout(pasteUpdateTimer);
+    }
+    pasteUpdateTimer = window.setTimeout(() => {
+      applyPastedText(textInput.value);
+    }, 120);
+  });
+
+  hasHeader.addEventListener("change", (event) => {
+    state.useHeader = event.target.checked;
+    refresh();
+  });
+
+  stripWww.addEventListener("change", (event) => {
+    state.stripWww = event.target.checked;
+    refresh();
+  });
+
+  includeComments.addEventListener("change", (event) => {
+    state.includeComments = event.target.checked;
+    refresh();
+  });
+
+  outputMode.addEventListener("change", (event) => {
+    state.outputMode = event.target.value;
+    refresh();
+  });
+
+  sheetSelect.addEventListener("change", (event) => {
+    applyWorkbookSheet(Number(event.target.value));
+    refresh();
+  });
+
+  sourceColumn.addEventListener("change", (event) => {
+    state.sourceColumnIndex = Number(event.target.value);
+    refresh();
+  });
+
+  downloadButton.addEventListener("click", downloadOutput);
+  copyButton.addEventListener("click", () => {
+    copyOutput().catch(() => {
+      const output = document.querySelector("#output");
+      output.focus();
+    });
+  });
+
+  ["dragenter", "dragover"].forEach((type) => {
+    dropzone.addEventListener(type, (event) => {
+      event.preventDefault();
+      dropzone.classList.add("dragover");
+    });
+  });
+
+  ["dragleave", "drop"].forEach((type) => {
+    dropzone.addEventListener(type, (event) => {
+      event.preventDefault();
+      dropzone.classList.remove("dragover");
+    });
+  });
+
+  dropzone.addEventListener("drop", (event) => {
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+      fileInput.files = event.dataTransfer.files;
+      readFile(file);
+    }
+  });
+
+  refresh();
+}
+
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+  window.disavowApp = {
+    analyzeRows,
+    buildDisavowText,
+    normalizeDomain,
+    normalizeUrl,
+  };
+  init();
+}
+
+</script>
+</body>
+</html>
+
